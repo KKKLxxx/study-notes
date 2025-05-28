@@ -52,19 +52,73 @@ sudo docker run hello-world
 
 如果启动成功，会显示对应的消息
 
-## 7、配置镜像加速
+```
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+...
+```
 
-首先打开阿里云《容器镜像服务 ACR》的控制台，找到镜像工具->镜像加速器，下面有一组指令，直接复制粘贴运行即可
+如果失败，提示可能如下（表示因网络原因无法访问镜像）
 
 ```
-sudo mkdir -p /etc/docker
+docker: Error response from daemon: Get "https://registry-1.docker.io/v2/": net/http: request canceled while waiting for connection (Client.Timeout exceeded while awaiting headers).
+```
+
+（25年5月更新）目前的网络环境大概率是失败的，需要先按照如下步骤配置镜像
+
+## 7、配置镜像加速
+
+（25年5月更新）实测目前阿里云的镜像也不可用了，可执行如下指令配置镜像源
+
+```
 sudo tee /etc/docker/daemon.json <<-'EOF'
 {
-  "registry-mirrors": ["https://xxxx.mirror.aliyuncs.com"]
+"registry-mirrors": [
+  "https://registry.docker-cn.com",
+  "https://s4uv0fem.mirror.aliyuncs.com",
+  "https://docker.1ms.run",
+  "https://registry.dockermirror.com",
+  "https://docker.m.daocloud.io",
+  "https://docker.kubesre.xyz",
+  "https://docker.mirrors.ustc.edu.cn",
+  "https://docker.1panel.live",
+  "https://docker.kejilion.pro",
+  "https://dockercf.jsdelivr.fyi",
+  "https://docker.jsdelivr.fyi",
+  "https://dockertest.jsdelivr.fyi",
+  "https://hub.littlediary.cn",
+  "https://proxy.1panel.live",
+  "https://docker.1panelproxy.com",
+  "https://image.cloudlayer.icu",
+  "https://docker.1panel.top",
+  "https://docker.anye.in",
+  "https://docker-0.unsee.tech",
+  "https://hub.rat.dev",
+  "https://hub3.nat.tf",
+  "https://docker.1ms.run",
+  "https://func.ink",
+  "https://a.ussh.net",
+  "https://docker.hlmirror.com",
+  "https://lispy.org",
+  "https://docker.yomansunter.com",
+  "https://docker.xuanyuan.me",
+  "https://docker.mybacc.com",
+  "https://dytt.online",
+  "https://docker.xiaogenban1993.com",
+  "https://dockerpull.cn",
+  "https://docker.zhai.cm",
+  "https://dockerhub.websoft9.com",
+  "https://dockerpull.pw",
+  "https://docker-mirror.aigc2d.com",
+  "https://docker.sunzishaokao.com",
+  "https://docker.melikeme.cn"
+  ]
 }
 EOF
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
 
-每个人的地址都不一样，这里我隐藏了自己的地址
+参考链接：https://blog.csdn.net/qq827245563/article/details/146085734
+
+配置完成后重新执行步骤6即可
