@@ -19,15 +19,15 @@ docker images
 ## 三、运行镜像
 
 ```
-docker run -itd --name redis-test -p 6379:6379 redis
+docker run -d --name redis-test -p 63791:6379 redis
 ```
 
 ## 四、远程连接Redis
 
-在本地可通过执行以下命令连接远程服务器上的Redis
+在本地（安装了redis客户端的目录）可通过执行以下命令连接远程服务器上的Redis
 
 ```
-redis-cli -h 111.111.111.111 -p 6379
+redis-cli -h 111.111.111.111 -p 63791
 ```
 
 `-h`指定主机号，`-p`指定端口号
