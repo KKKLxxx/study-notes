@@ -19,9 +19,9 @@ docker images
 ## 三、运行镜像
 
 ```
-docker run -itd -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" --name es-test elasticsearch:8.4.3
+docker run -d -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" -e "ES_JAVA_OPTS=-Xms512m -Xmx512m" --name es-test elasticsearch:8.4.3
 
-docker run -itd -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" --name es-test elasticsearch:8.4.3
+docker run -d -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" --name es-test elasticsearch:8.4.3
 ```
 
 9200是http协议的web客户端RESTful端口
@@ -69,7 +69,7 @@ http.cors.allow-origin: "*"
 ## 六、安装ik插件
 
 ```
-./bin/elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v8.4.3/elasticsearch-analysis-ik-8.4.3.zip
+./bin/elasticsearch-plugin install https://get.infini.cloud/elasticsearch/analysis-ik/8.4.3
 ```
 
 注意要对应版本
