@@ -23,3 +23,4 @@
 3、优化表设计，**减少表连接**
 
 参考链接：https://mp.weixin.qq.com/s?__biz=MzUxODAzNDg4NQ==&mid=2247518397&idx=1&sn=c75e71eca9127474d60d9ea9bdcb546a&chksm=f98dcc17cefa450181debb590e79958d247ef9ffbbb94a36f5726b19829eec598acce24b31dd&mpshare=1&scene=23&srcid=08048R2YHYaiCBsyvYaPzbMs&sharer_sharetime=1659605941721&sharer_shareid=19016e55d7718b51a304b063133a75f7#rd
+
