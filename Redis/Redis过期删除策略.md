@@ -1,16 +1,16 @@
-# Redis过期key的实现
+# Redis过期删除策略
 
 ## 一、存储结构
 
 ![image-20231124211026519](https://raw.githubusercontent.com/KKKLxxx/img-host/master/image-20231124211026519.png)
 
-redisDb结构中，除了使用一个dict用于存储所有的键值对，还有一个dict类型的`expires`用于存储所有过期键。`expires`中的value记录的不再是key对应的值，而是key的过期时间
+redisDb结构中，除了使用一个dict用于存储所有的键值对，还有一个dict类型的**过期字典**`expires`用于存储所有过期键。`expires`中的value记录的不再是key对应的值，而是key的过期时间
 
 ## 二、过期key的删除时机
 
-因为当key很多时，如果持续不断地轮询`expires`会对redis造成很大的压力，所以实时删除是无法接受的
+因为当key很多时，如果持续不断地轮询`expires`（或者通过定时事件立刻删除过期key）会对redis造成很大的压力，所以实时删除是无法接受且必要性不大的
 
-所以redis采取的方法是惰性删除和周期删除
+所以redis采取的方法是**惰性删除+周期删除**
 
 ### 1、惰性删除
 
@@ -25,5 +25,5 @@ redisDb结构中，除了使用一个dict用于存储所有的键值对，还有
 周期删除还分为SLOW和FAST两种模式：
 
 - **SLOW**：低频执行，但每次执行相对较长时间，每次会对更多key进行检测
-- **FAST**：高品质行，但每次执行时间较短，每次检测的key更少
+- **FAST**：高频执行，但每次执行时间较短，每次检测的key更少
 
