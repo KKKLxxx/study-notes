@@ -2,7 +2,7 @@
 
 有这样一个场景，线程A只有当满足一个条件时才能继续进行，而这个条件要由线程B去改变，比如
 
-```
+```java
 // 线程A
 while (flag == 0) {
     continue; // 循环等待直到条件满足
@@ -18,7 +18,7 @@ flag = 1;
 
 有一种解决办法，可以让线程A不满足条件时先睡眠一段时间，比如
 
-```
+```java
 // 线程A
 while (flag == 0) {
     Thread.sleep(1000); // 每次检验条件不满足就睡1s
@@ -49,7 +49,7 @@ while (flag == 0) {
 
 用一段代码来演示用法
 
-```
+```java
 public class Main {
     static boolean flag = true;
     static Object lock = new Object();

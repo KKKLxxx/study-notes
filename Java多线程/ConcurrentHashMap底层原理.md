@@ -36,7 +36,7 @@ HashTable虽然保证了线程安全，但是由于它每次操作都要锁住�
 
 Node结点的结构：
 
-```
+```java
 static class Node<K,V> implements Map.Entry<K,V> {
         final int hash;
         final K key;
@@ -52,7 +52,7 @@ static class Node<K,V> implements Map.Entry<K,V> {
 
 在put操作的源码中，有判断键值是否为null的代码
 
-```
+```java
 final V putVal(K key, V value, boolean onlyIfAbsent) {
         if (key == null || value == null) throw new NullPointerException();
 }

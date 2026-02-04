@@ -4,7 +4,7 @@
 
 默认的引用类型
 
-```
+```java
 Object obj = new Object(); // 只要obj还指向Object对象，Object对象就不会被回收
 obj = null; // 手动置null
 ```
@@ -17,7 +17,7 @@ obj = null; // 手动置null
 
 用程序测试一下，给虚拟机设置2个参数，`-Xms2M -Xmx3M`，用来限制内存大小
 
-```
+```java
 public class Main {
     private static List<Object> list = new ArrayList<>();
 
@@ -54,7 +54,7 @@ null
 
 **无论内存是否足够，只要 JVM 开始进行垃圾回收，那些被弱引用关联的对象都会被回收**
 
-```
+```java
 public class Main {
     private static List<Object> list = new ArrayList<>();
 
@@ -97,7 +97,7 @@ null
 
 虚引用需要配合一个引用队列使用，当对象被回收时，就会被加入到这个队列
 
-```
+```java
 public class Main {
     public static void main(String[] args) {
         Object o1 = new Object();

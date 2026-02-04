@@ -8,7 +8,7 @@
 
 ### （一）添加依赖
 
-```
+```java
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-aspects</artifactId>
@@ -19,7 +19,7 @@
 
 要通过`@interface`来定义一个注解
 
-```
+```java
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OperationLogger {
@@ -34,15 +34,15 @@ public @interface OperationLogger {
 
 #### 1、@Target
 
-表示注解的**应用范围**，ElemenetType参数包括
+表示注解的**作用域**，ElemenetType参数包括
 
-* ElemenetType.CONSTRUCTOR 构造器声明
-* ElemenetType.FIELD 域声明（包括 enum 实例） 
-* ElemenetType.LOCAL_VARIABLE 局部变量声明
-* **ElemenetType.METHOD 方法声明**
-* ElemenetType.PACKAGE 包声明
-* ElemenetType.PARAMETER 参数声明
-* **ElemenetType.TYPE 类，接口（包括注解类型）或enum声明**
+* ElemenetType.CONSTRUCTOR：构造器声明
+* **ElemenetType.FIELD：域声明（包括 enum 实例）** 
+* ElemenetType.LOCAL_VARIABLE：局部变量声明
+* **ElemenetType.METHOD：方法声明**
+* ElemenetType.PACKAGE：包声明
+* ElemenetType.PARAMETER：参数声明
+* **ElemenetType.TYPE：类，接口（包括注解类型）或enum声明**
 
 比如如果为`METHOD`，说明该注解应该用在一个方法上；如果是`TYPE`，说明该注解应该用在一个类/接口上
 
@@ -50,9 +50,9 @@ public @interface OperationLogger {
 
 表示注解的**生命周期**。可选的RetentionPolicy参数包括
 
-* RetentionPolicy.SOURCE 注解将被编译器丢弃
-* RetentionPolicy.CLASS 注解在class文件中可用，但会被VM丢弃
-* RetentionPolicy.RUNTIME VM将在运行期也保留注释，因此可以通过反射机制读取注解的信息
+* RetentionPolicy.SOURCE：注解将被编译器丢弃
+* RetentionPolicy.CLASS：注解在class文件中可用，但会被VM丢弃
+* **RetentionPolicy.RUNTIME：JVM将在运行期也保留注释，因此可以通过反射机制读取注解的信息**
 
 如果我们自己编写注解，最常用的是`RUNTIME`
 
@@ -70,7 +70,7 @@ public @interface OperationLogger {
 
 部分代码：
 
-```
+```java
 @Aspect
 @Component
 public class LoggerAspect {
@@ -81,7 +81,7 @@ public class LoggerAspect {
 
     @Around(value = "pointcut(operationLogger)")
     public Object doAround(ProceedingJoinPoint joinPoint, OperationLogger operationLogger) throws Throwable {
-        //先执行业务
+        // 先执行业务
         Object result = joinPoint.proceed();
 
         try {
@@ -98,13 +98,14 @@ public class LoggerAspect {
 
 ### （四）使用注解
 
-```
+```java
 @OperationLogger(value = "重置用户密码")
 public String restPwd() {
+    
 }
 ```
 
-通过在方法上添加`@OperationLogger(value = "重置用户密码")`，就可以实现执行restPwd()方法的同时进行日志收集
+通过在方法上添加`@OperationLogger(value = "重置用户密码")`，就可以实现执行`restPwd()`方法的同时进行日志收集
 
 ## 三、注解何时生效
 
@@ -129,7 +130,7 @@ public String restPwd() {
 
 在Spring中使用@Transactional、@Cacheable或自定义AOP注解时，会发现：在对象内部的方法中调用该对象的其他使用AOP注解的方法，被调用方法的AOP注解失效。比如
 
-```
+```java
 public class UserService{
     @Transactional
     public void hello(){
@@ -160,7 +161,7 @@ public class UserService{
 
 可以通过`@Autowired`自己注入自己，然后在需要嵌套调用的地方通过注入的bean调用
 
-```
+```java
 public class UserService{
 	@Autowired
 	private UserService userService;

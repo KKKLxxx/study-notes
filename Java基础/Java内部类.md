@@ -105,67 +105,67 @@ class Outer {
 
 1、静态内部类的创建不需要依赖于外部对象
 
-2、静态内部类不能引用外部类的非static变量和方法（因为外部类的非static变量需要依赖于一个外部类对象，静态内部类的加载时间先于外部类对象的加载。如果静态内部类有一个外部类非static变量的引用，则矛盾）
+2、**静态内部类不能引用外部类的非static变量和方法（因为外部类的非static变量需要依赖于一个外部类对象，静态内部类的加载时间先于外部类对象的加载。如果静态内部类有一个外部类非static变量的引用，则矛盾）**
 
 ## 五、作用
 
-### 1、解决继承及实现接口出现同名方法的问题
+### 1. 解决继承及实现接口出现同名方法的问题
 
 编写一个接口 Demo
 
 ```Java
-  public interface Demo {
-      void test();
-  }
+public interface Demo {
+	void test();
+}
 ```
 
 编写一个类 MyDemo
 
 ```Java
-  public class MyDemo {
-      public void test() {
-          System.out.println("父类的test方法");
-      }
-  }
+public class MyDemo {
+    public void test() {
+		System.out.println("父类的test方法");
+	}
+}
 ```
 
 编写一个[测试类](https://www.zhihu.com/search?q=测试类&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"answer"%2C"sourceId"%3A708467570})
 
 ```Java
-  public class DemoTest extends MyDemo implements Demo {
-      public void test() {
-      }
-  }
+public class DemoTest extends MyDemo implements Demo {
+    public void test() {
+    }
+}
 ```
 
 这样的话我就有点懵了，这样如何区分这个方法是接口的还是继承的，所以我们使用内部类解决这个问题
 
 ```Java
 public class DemoTest extends MyDemo {
-  private class inner implements Demo {
-      public void test() {
-          System.out.println("接口的test方法");
-      }
-  }
+    private class inner implements Demo {
+        public void test() {
+            System.out.println("接口的test方法");
+        }
+    }
   
-  public Demo getIn() {
-      return new inner();
-  }
+    public Demo getIn() {
+        return new inner();
+    }
   
-  public static void main(String[] args) {//调用接口而来的test()方法
-      DemoTest dt = new DemoTest();
-      Demo d = dt.getIn();
-      d.test();//调用继承而来的test()方法
-      dt.test();
-  }
+    public static void main(String[] args) {	// 调用接口而来的test()方法
+        DemoTest dt = new DemoTest();
+        Demo d = dt.getIn();
+        d.test();	// 调用继承而来的test()方法
+        dt.test();
+    }
 }
 
-//运行结果
+// 运行结果
 接口的test方法
 父类的test方法
 ```
 
-### 2、实现多继承
+### 2. 实现多继承
 
 ```Java
 public class Demo1 {

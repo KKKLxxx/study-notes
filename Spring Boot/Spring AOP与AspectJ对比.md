@@ -1,5 +1,7 @@
 # Spring AOP与AspectJ对比
 
+Spring 使用 `@Aspect` ≠ 使用 AspectJ
+
 ## 一、织入方式
 
 Weaving织入：链接切面和目标对象来创建一个通知对象的过程
