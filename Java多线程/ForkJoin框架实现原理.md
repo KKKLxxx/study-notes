@@ -27,7 +27,7 @@
 
 然后要**通过一个ForkJoinPool提交并执行ForkJoinTask**
 
-```
+```java
 public class CountTask extends RecursiveTask<Integer> {
     private static final int THRESHOLD = 2;
     private int start;
@@ -45,7 +45,7 @@ public class CountTask extends RecursiveTask<Integer> {
         // 如果任务足够小就计算
         boolean canCompute = (end - start) <= THRESHOLD;
         if (canCompute) {
-            for (int i = start; i <= end; ++i) {
+            for (int i = start; i <= end; i++) {
                 sum += i;
             }
         } else {
@@ -83,3 +83,4 @@ public class CountTask extends RecursiveTask<Integer> {
 ```
 
 这里模拟的是一个计算1+2+...+10000的任务，因为是又返回结果的任务，所以继承的是RecursiveTask
+
