@@ -1,4 +1,4 @@
-# Spring Bean作用域与生命周期
+# Spring Bean
 
 ## 一、Spring Bean定义
 
@@ -6,9 +6,9 @@
 
 ## 二、作用域
 
-1、**单例**：适用于无状态Bean（因为线程安全，无状态即无实例字段），**默认**
+1、**单例**：适用于无状态Bean（无状态即无实例字段，适用场景如Service、DAO层），**默认**
 
-2、**原型**：每次调用都返回一个新的实例，适用于有状态Bean
+2、**原型**：每次调用都返回一个新的实例，适用于有状态Bean（适用场景如用户会话、临时计算对象）
 
 3、**request**：每次HTTP请求都创建一个新的实例，仅适用于Web应用
 
@@ -20,11 +20,11 @@
 
 实例化Bean -> PostConstruct -> 通过实现一些接口执行某些方法 -> PreDestory ->销毁
 
-**原型**：创建完成后，对Bean的销毁需要由程序员管理，所以不会自动执行PreDestory方法
+**对于原型Bean**：由IoC容器创建完成后，其生命周期交给程序员管理，对Bean的销毁需要由程序员手动执行，所以不会自动执行PreDestory方法
 
 具体指定方法是在bean内通过`@PostConstruct`和`@PreDestory`注解指定
 
-```Plain
+```java
 @PostConstruct
 private void postConstruct() {
     ...
