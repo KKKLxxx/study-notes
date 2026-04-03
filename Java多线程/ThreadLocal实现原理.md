@@ -200,10 +200,7 @@ public class ThreadLocalRemoveDemo {
                 } finally {
                     // ⭐ 非常重要：任务结束必须清理
                     threadLocal.remove();
-                    System.out.println(
-                        Thread.currentThread().getName()
-                        + " 已 remove ThreadLocal"
-                    );
+                    System.out.println(Thread.currentThread().getName() + " 已 remove ThreadLocal");
                 }
             });
         }

@@ -31,14 +31,14 @@ SELECT COUNT(id) FROM table_name;
 
 **特点**：统计主键不为NULL的行数（主键不可能为NULL，所以通常等于总行数）
 
-### 4. COUNT(普通列)
+### 4. COUNT(非主键索引列 / 普通列)
 
 ```sql
 -- 统计该列非NULL的行数
 SELECT COUNT(name) FROM table_name;
 ```
 
-**特点**：只统计该列不为NULL的行数
+**特点**：只统计该列不为NULL的行数（唯一索引和普通索引均可以为NULL）
 
 ### 5. COUNT(DISTINCT 列)
 

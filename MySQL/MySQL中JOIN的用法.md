@@ -27,6 +27,7 @@ SELECT * FROM tab1 CROSS JOIN tab2
 
 ```sql
 SELECT * FROM tab1 INNER JOIN tab2 ON tab1.id1 = tab2.id2
+SELECT * FROM tab1 JOIN tab2 ON tab1.id1 = tab2.id2		# 可以简写为JOIN
 ```
 
  结果

@@ -12,58 +12,22 @@ Java中一共有8种基本类型，可以具体分为4类：
 
 4、布尔值：boolean
 
-可以通过基本类型对应的引用类型来查看其大小
+| 基本类型  | 作为局部变量（栈） | 作为数组元素（堆） | 备注                           |
+| :-------- | :----------------- | :----------------- | :----------------------------- |
+| `byte`    | 4 字节             | 1 字节             | 局部变量被提升为 `int` 处理    |
+| `short`   | 4 字节             | 2 字节             | 同上                           |
+| `int`     | 4 字节             | 4 字节             | —                              |
+| `long`    | 8 字节             | 8 字节             | 局部变量占用连续两个槽位       |
+| `float`   | 4 字节             | 4 字节             | —                              |
+| `double`  | 8 字节             | 8 字节             | 局部变量占用连续两个槽位       |
+| `char`    | 4 字节             | 2 字节             | 局部变量被提升为 `int` 处理    |
+| `boolean` | 4 字节             | 1 字节             | 局部变量被当作 `int`（值 0/1） |
 
-```java
-public class Main {    
-		public static void main(String[] args) {
-        System.out.println("byte类型大小：" + Byte.BYTES + " 字节");
-        System.out.println("short类型大小：" + Short.BYTES + " 字节");
-        System.out.println("int类型大小：" + Integer.BYTES + " 字节");
-        System.out.println("long类型大小：" + Long.BYTES + " 字节");
-        System.out.println("float类型大小：" + Float.BYTES + " 字节");
-        System.out.println("double类型大小：" + Double.BYTES + " 字节");
-        System.out.println("char类型大小：" + Character.BYTES + " 字节");
-        // System.out.println("boolean类型大小：" + Boolean.BYTES + " 字节");
-    }
-}
-```
+作为单个局部变量时，因为栈的每个槽位是4字节，所以为了复用int的指令集，并提高执行效率，小于等于int的数据类型会被当作int处理，占用4个字节
 
-点进各个类型的源码中可以看见有两个字段，一个是SIZE（位数），一个是BYTES（字节数）
+作为数组时，为了节省空间，会按照其本身所应占的大小进行分配
 
-但是Boolean类型中并没有这两个字段，所以稍后再具体解释boolean
-
-得到结果：
-
-```
-byte类型大小：1 字节
-short类型大小：2 字节
-int类型大小：4 字节
-long类型大小：8 字节
-float类型大小：4 字节
-double类型大小：8 字节
-char类型大小：2 字节
-```
-
-对于boolean类型，在《Java虚拟机规范》一书中的描述
-
-> 虽然定义了boolean这种数据类型，但是对它提供了非常有限的支持。在Java虚拟机中没有任何供boolean值专用的字节码指令，Java语言表达式所操作的boolean值，在编译之后都使用Java虚拟机中的int数据类型来代替，而boolean数组将会被编码成Java虚拟机的byte数组，每个元素boolean元素占8位
-
-不提供boolean专用字节码指令的原因：可能是为了简化指令
-
-**总结一下**：
-
-整数：byte（1），short（2），int（4），long（8）
-
-浮点数：float（4），double（8）
-
-字符：char（2）
-
-布尔值：boolean（4或1）
-
-对于单个boolean值，其所占大小为4字节
-
-对于boolean数组，其每个boolean值所占大小为1字节
+虽然boolean理论上只需要1bit的存储空间，但是计算机的最小寻址单元是字节，如果用bit存储的话，可能无法直接访问和修改一个单独的位
 
 ## 二、自动装箱、拆箱
 
@@ -79,7 +43,7 @@ char类型大小：2 字节
 
 ### 1. 包装类的作用
 
-Java中绝大部分泛型方法都是用来处理引用类型的，而无法接收基本数据类型，比如`List<Integer>`
+Java中泛型方法都是用来处理引用类型的，而无法接收基本数据类型，比如`List<Integer>`
 
 ### 2. 为什么还要保留基本数据类型
 
@@ -119,5 +83,7 @@ public static Integer valueOf(String s) throws NumberFormatException {
 
 ## 四、BigDecimal的作用
 
-BigDecimal用于精确的数值计算，比如金钱交易等场景。double等浮点数类型不能准确地表示部分十进制小数，比如0.1
+BigDecimal用于精确的数字计算，比如金钱交易等场景。double等浮点数类型是基于二进制存储的，不能准确地表示部分十进制小数，比如0.1
+
+`BigDecimal` 通过将十进制数字表示为**未缩放的整数值（unscaled value）**和**小数位数（scale）**的组合，并结合整数运算与舍入规则，实现了精确的数字计算
 

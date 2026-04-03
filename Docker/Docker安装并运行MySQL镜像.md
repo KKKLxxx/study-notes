@@ -20,6 +20,8 @@ docker images
 
 ```
 docker run -d --name mysql-test -p 33061:3306 -e MYSQL_ROOT_PASSWORD=root mysql --default-time-zone=Asia/Shanghai
+
+docker run -d --name mysql-ustc-gcsj -p 33070:3306 -e MYSQL_ROOT_PASSWORD=root mysql --default-time-zone=Asia/Shanghai
 ```
 
 `-d`表示在后台运行容器

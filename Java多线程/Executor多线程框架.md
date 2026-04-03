@@ -80,8 +80,8 @@ public ThreadPoolExecutor(int corePoolSize,
 用于保存等待执行的任务的阻塞队列，主要有4种
 
 - **ArrayBlockQueue**：基于数组结构的有界队列
-- **LinkedBlockQueue**：基于链表结构的有界队列，吞吐量高于ArrayBlockQueue
-- **SynchronousQueue**：不存储元素的队列，每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态。吞吐量高于LinkedBlockQueue
+- **LinkedBlockQueue**：基于链表结构的无界队列
+- **SynchronousQueue**：不存储元素的队列，每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
 - **PriorityBlockQueue**：具有优先级的无界队列
 
 #### 2.6 threadFactory（创建线程的工厂）
@@ -101,11 +101,11 @@ public ThreadPoolExecutor(int corePoolSize,
 
 ThreadPoolExecutor是最常用的线程池，通常使用工厂类Executors创建，有3种类型
 
-- **FixedThreadPool**：创建固定线程数的线程池，适用于为了满足资源管理需要，而需要限制线程数量的场景，即负载较重的服务器
+- **FixedThreadPool**：固定线程数的线程池，适用于为了满足资源管理需要，而需要限制线程数量的场景，即负载较重的服务器
 
-- **SingleThreadPool**：创建使用单个线程的线程池，保证顺序地执行各个任务
+- **SingleThreadPool**：使用单个线程的线程池，保证顺序地执行各个任务
 
-- **CachedThreadPool**：创建没有线程数量限制的线程池，适用于执行很多短期异步任务的场景，即负载较轻的服务器。有耗尽资源的风险
+- **CachedThreadPool**：核心线程数为0，最大线程数无限，要搭配SynchronousQueue使用，适用于执行突发大量短期异步任务的场景，有耗尽资源的风险。CachedThreadPool适合处理突发流量，因为它平时不会保活线程，只在流量到达时创建尽可能多的线程，并复用这些线程处理多个短期任务，在流量过去后又会销毁
 
 ### 4. ScheduledThreadPoolExecutor的2种类型
 
@@ -170,9 +170,10 @@ public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveT
 
 ### 7. 关闭线程池
 
-可以通过对线程池调用**shutdown()**或者**shutdownNow()**方法关闭线程池，它们的原理是**遍历线程池中的工作线程，然后调用线程的interrupt()方法来中断线程**，所以无法响应中断的任务可能永远无法终止
+可以通过对线程池调用**shutdown()**或者**shutdownNow()**方法关闭线程池
 
-它们的区别在于：shutdown()只是将线程池的状态设置成SHUTDOWN，然后中断所有没有正在执行任务的线程；而shutdownNow()首先将线程池的状态设置成STOP，然后尝试停止所有正在执行或暂停任务的线程，并返回等待执行任务的列表。即**shutdown()会等待已经开始执行的任务执行完成，而shutdownNow()会停止已经开始的任务**
+- **shutdown()**：已提交但未开始的任务仍会被调度，已经开始的任务会正常执行完毕
+- **shutdownNow()**：已提交但未开始的任务会被撤销，已经开始的任务会被发送中断信号（但是否停止要看任务内部是否对中断信号正确响应）
 
 ### 8. 线程池配置建议
 
@@ -184,7 +185,7 @@ public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveT
 
 - **CPU密集型**
 
-  这种情况下最大线程数设置为**n+1**即可，n为CPU核数。比CPU核心数多出来的一个线程是为了防止偶发的缺页中断，或者其它原因导致的任务暂停而带来的影响
+  这种情况下最大线程数设置为**n+1**即可，n为CPU核数（**处理器核心数/计算单元的个数**）。比CPU核心数多出来的一个线程是为了防止偶发的缺页中断，或者其它原因导致的任务暂停而带来的影响
 
   因为更多的线程也无法提高CPU利用率，反而会带来上下文切换的开销
 

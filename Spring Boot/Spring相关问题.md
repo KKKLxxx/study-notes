@@ -2,13 +2,11 @@
 
 ## 一、Spring MVC
 
-MVC，Model View Controller（模型-视图-控制器），是一种设计模式，用一种数据、界面、业务逻辑分离的方式组织代码，从而降低代码的耦合
+MVC，Model View Controller（模型-视图-控制器），是一种设计模式，它以数据、界面、业务逻辑分离的方式组织代码，从而降低代码的耦合
 
-- **模型**：代表一个存储数据的对象，主要用于承载数据，还可对用户提交的请求进行计算，模型分为两类：
-  - 数据承载 Bean：指实体类（如：User类），专门为用户承载业务数据
-  - 业务处理 Bean：指 Service 或 Dao 对象， 专门用于处理用户提交的请求
-- **视图**：为用户提供使用界面，与用户直接进行交互
-- **控制器**：用于将用户请求转发给相应的 Model 进行处理，并根据 Model 的计算结果向用户提供相应响应，它使视图与模型分离
+- **模型**：负责封装数据和业务逻辑
+- **视图**：负责数据展示
+- **控制器**：负责接收用户请求，调用模型处理，并选择合适的视图返回
 
 ## 二、Servlet与Servlet容器
 
@@ -29,7 +27,7 @@ Servlet是一种专用于Java平台的底层网络连接处理技术，它可以
 
 Servlet容器是Web服务器或应用程序服务器的一部分。Servlet没有main方法，不能独立运行，它必须被部署到Servlet容器中，由容器来实例化和调用Servlet的方法（如doGet()和doPost()），Servlet容器在Servlet的生命周期内管理Servlet
 
-常见的Servlet容器：Tomcat
+常见的Servlet容器：Tomcat、Jetty、Undertow
 
 ### 3. DispatcherServlet
 
@@ -131,13 +129,13 @@ Filter（响应返回阶段）
 客户端
 ```
 
-过滤器是基于 Servlet 规范的组件，在请求进入 DispatcherServlet 之前执行，可以对所有请求进行过滤
+过滤器是 Servlet 提供的机制，在请求进入 DispatcherServlet 之前执行
 
 拦截器是 Spring MVC 提供的机制，在 Controller 方法执行前后进行增强
 
-过滤器更底层，用于控制“通用的请求流”，比如修改 request / response、跨域处理
+过滤器更接近底层，用于处理“通用的请求流”，比如修改 request / response、跨域处理
 
-拦截器更接近业务层，用于控制“具体的业务方法”，比如登录校验、权限控制、日志记录、统计接口耗时
+拦截器更接近业务，用于处理“具体的业务方法”，比如登录校验、权限控制、日志记录、统计接口耗时
 
 ## 四、SpringBoot相关问题
 
@@ -149,60 +147,13 @@ Spring Boot 是对 Spring 的增强，主要是通过自动装配机制减少配
 
 Spring Boot 启动时通过 @EnableAutoConfiguration 加载自动配置类，并通过条件注解决定是否注册 Bean（比如`@ConditionalOnClass(DispatcherServlet.class)`表示只有当类路径中存在 DispatcherServlet 才生效）
 
-## 五、@Value、@Resource、@Autowired的区别
-
-### 1. @Value
-
-@Value用于注入值，常用于读取 application.properties
-
-示例：
-
-```java
-@Value("${server.port}")
-private int port;
-
-@Value("hello")
-private String name;
-
-@Value("#{2 * 3}")
-private int result;
-```
-
-### 2. @Resource— Java 规范方式
-
-@Resource用于按照**名称**自动注入 Bean，如果存在多个，则按照类型进行匹配
-
-```java
-@Resource
-private UserService userService;
-
-@Resource(name = "userServiceImpl")		// name字段可选
-private UserService userService;
-```
-
-### 3. @Autowired—Spring 推荐方式
-
-@Autowired用于按照**类型**自动注入 Bean，如果存在多个，则按照名称进行匹配（可以配合@Qualifier指定）
-
-```java
-@Autowired
-@Qualifier("userServiceImpl")
-private UserService userService;
-```
-
-### 4. 对比
-
-@Value用于注入值，@Resource与@Autowired用于注入Bean
-
-更推荐使用@Autowired，因为它是Spring提供的，更适合Spring架构的程序，并且先按类型匹配的逻辑更符合面向接口编程的思想
-
-## 六、程序打包与运行
+## 五、程序打包与运行
 
 ### 1. 打包
 
 首先确保在`pom.xml`中引入了maven依赖
 
-```
+```xml
 <build>
     <plugins>
         <plugin>

@@ -21,7 +21,7 @@
 
 ### 1. AQS的作用
 
-抽象队列同步器（**A**bstract**Q**ueued**S**ynchronizer）是`Lock`接口实现的基础，AQS**用一个`volatile int`成员变量表示同步状态，通过内置的FIFO队列来完成资源获取线程的排队工作**
+抽象队列同步器（**A**bstract**Q**ueued**S**ynchronizer）是`Lock`接口实现的基础，AQS**用一个`volatile int`成员变量表示同步状态，通过内置的FIFO队列来完成线程的排队工作**
 
 AQS的主要使用方式是**继承**，**子类通过继承AQS并实现它的抽象方法来管理同步状态，在抽象方法的实现过程中免不了要对同步状态进行更改，这时就需要使用AQS提供的3个方法**
 

@@ -36,7 +36,17 @@
 
 ## 二、异常处理
 
-### 1. try-catch-finally
+### 1. throws
+
+用于在方法声明中声明可能抛出的异常类型。如果一个方法可能抛出异常，但不想在方法内部进行处理，可以使用throws关键字将异常传递给调用者来处理
+
+```java
+public void methodName() throws ExceptionType {
+
+}
+```
+
+### 2. try-catch-finally
 
 - `try`块：用于捕获异常。其后可接零个或多个 `catch` 块，如果没有 `catch` 块，则必须跟一个 `finally` 块
 - `catch`块：用于处理 try 捕获到的异常
@@ -63,7 +73,7 @@ Catch Exception -> RuntimeException
 Finally
 ```
 
-### 2. try-with-resources
+### 3. try-with-resources
 
 《Effective Java》中指出：
 

@@ -4,7 +4,7 @@
 
 ![image-20231124211026519](https://raw.githubusercontent.com/KKKLxxx/img-host/master/image-20231124211026519.png)
 
-redisDb结构中，除了使用一个dict用于存储所有的键值对，还有一个dict类型的**过期字典**`expires`用于存储所有过期键。`expires`中的value记录的不再是key对应的值，而是key的过期时间
+redisDb结构中，除了使用一个dict用于存储所有的键值对，还有一个dict类型的**过期字典**`expires`用于存储所有设置了过期时间的键。`expires`中的value记录的不再是key对应的值，而是key的过期时间
 
 ## 二、过期key的删除时机
 
