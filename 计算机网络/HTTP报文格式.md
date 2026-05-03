@@ -17,7 +17,7 @@ Cookie: session_id=abc123def456
 
 **请求行**：请求方法（GET/POST）、请求地址、HTTP版本
 
-**请求头**：Host、User-Agent（浏览器类型）、Connection（连接方式，如keep-alive）、Cookie
+**请求头**：Host、User-Agent（客户端类型）、Connection（连接方式，如keep-alive）、Cookie
 
 - **短连接**：一次请求结束后就关闭连接，便于管理，但需要重复建立TCP连接
 - **长连接**：连接可以复用（Keep-Alive），一段时间内没有HTTP请求则断开

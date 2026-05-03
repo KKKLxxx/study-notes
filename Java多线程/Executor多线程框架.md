@@ -81,12 +81,14 @@ public ThreadPoolExecutor(int corePoolSize,
 
 - **ArrayBlockQueue**：基于数组结构的有界队列
 - **LinkedBlockQueue**：基于链表结构的无界队列
-- **SynchronousQueue**：不存储元素的队列，每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态
+- **SynchronousQueue**：同步队列，即不存储元素的队列，用于让线程池尽快创建新线程去执行任务
 - **PriorityBlockQueue**：具有优先级的无界队列
 
 #### 2.6 threadFactory（创建线程的工厂）
 
-比如可用自定义的线程工厂给创建出来的线程设置有意义的名字，也可以使用默认的线程工厂
+一般使用默认的线程工厂即可
+
+自定义的线程工厂可以给线程设置名称（便于日志追踪）、优先级等
 
 #### 2.7 handler（拒绝策略）
 

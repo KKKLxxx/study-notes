@@ -61,7 +61,7 @@ resize operation.
 static final int UNTREEIFY_THRESHOLD = 6;
 ```
 
-直接说结论：会，但不是立刻转回，而是要等到下一次resize()时检验结点数与`UNTREEIFY_THRESHOLD`的关系，如果小于等于6，就可以转回
+直接说结论：会，当红黑树结点个数小于等于6时就会转回（即remove()操作）
 
 ### 3. 哈希冲突解决方法有哪些？
 

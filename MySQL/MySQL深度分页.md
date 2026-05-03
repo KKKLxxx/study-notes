@@ -6,7 +6,7 @@
 
 ```sql
 -- 当 offset 很大时，性能极差
-SELECT * FROM orders ORDER BY id LIMIT 1000000, 20;
+SELECT * FROM order LIMIT 1000000, 20;
 ```
 
 **问题原因**：
@@ -27,10 +27,9 @@ SELECT * FROM orders ORDER BY id LIMIT 1000000, 20;
 
 ```sql
 -- 优化1：使用索引覆盖先获取主键
-SELECT * FROM orders 
+SELECT * FROM order 
 WHERE id IN (
-    SELECT id FROM orders 
-    ORDER BY created_at DESC, id DESC 
+    SELECT id FROM order 
     LIMIT 1000000, 20
 );
 ```
@@ -40,21 +39,14 @@ WHERE id IN (
 通用的分页查询是根据offset和pageSize直接确定所需要的数据，但在连续分页查询的场景中，可以记录上一页数据的最大id，在查询下一页数据时，通过where替代offset，从而利用索引提高查询速度
 
 ```sql
--- 传统分页（跳页查询）
-SELECT * FROM orders 
-ORDER BY id 
-LIMIT 1000000, 20;  -- 性能差
-
 -- 游标分页（连续分页）
 -- 第一页
-SELECT * FROM orders 
-ORDER BY id 
+SELECT * FROM orders
 LIMIT 20;
 
 -- 第二页：记住第一页的最大ID（假设为1000）
-SELECT * FROM orders 
+SELECT * FROM order 
 WHERE id > 1000  -- 使用where条件代替offset
-ORDER BY id 
 LIMIT 20;
 ```
 

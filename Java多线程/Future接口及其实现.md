@@ -67,22 +67,27 @@ public FutureTask(Runnable runnable, V result) {
 
 ### 1. CompletableFuture的作用
 
-`Future` 在实际使用过程中存在一些局限性，比如不支持异步任务的编排组合、获取计算结果的 `get()` 方法为阻塞调用
+`CompletableFuture`相比`Future`的主要优点在于，支持异步任务的编排、回调式处理与灵活的异常处理
 
-JDK8 才被引入的`CompletableFuture`类可以解决`Future`的这些缺陷。`CompletableFuture`除了提供了更为好用和强大的 `Future` 特性之外，还提供了函数式编程、异步任务编排组合（可以将多个异步任务串联起来，组成一个完整的链式调用）等能力
+- **异步任务的编排**
+  - `CompletableFuture`能够将通过`allOf()`并行运行多个任务，或通过`thenCompose()`方法指定多个任务的执行顺序
+  - `Future`只能分别提交每个任务
+- **回调式处理**
+  - `CompletableFuture`能够通过`thenRun()/thenApply()`等指定一个任务完成后的回调函数，不阻塞当前线程
+    - 但通常还是要加个`join()`等待任务执行完再返回结果
+    - `thenRun()/thenApply()`的区别在于，前者不能访问异步任务的返回结果，后者可以
+    - 这点其实也属于任务编排
+  - `Future`只能通过`join()/get()`阻塞当前线程，等待任务执行完成
+- **异常处理**
+  - `CompletableFuture`能够在异步任务执行的过程中，通过`handle()`等方法由调用者处理异常
+  - `Future`只能在异步任务中自行处理异常或在最终通过`get()`获取结果时由调用者处理异常
 
-下面我们来简单看看 `CompletableFuture` 类的定义
+### 2. 使用示例
 
-```java
-public class CompletableFuture<T> implements Future<T>, CompletionStage<T> {
-}
-```
+**任务提交方法**：
 
-可以看到，`CompletableFuture` 同时实现了 `Future` 和 `CompletionStage` 接口
-
-`CompletionStage` 接口描述了一个异步计算的阶段。很多计算可以分成多个阶段或步骤，此时可以通过它将所有步骤组合起来，形成异步计算的流水线
-
-### 2. CompletableFuture使用示例
+- `runAsync()`：无返回值
+- `supplyAsync()`：有返回值
 
 假设一个场景：任务T3需要在T1和T2完成之后再执行
 
@@ -111,23 +116,6 @@ ThreadUtil.sleep(3000);
 
 ### 3. 使用CompletableFuture时为什么要自定义线程池？
 
-`CompletableFuture` 默认使用全局共享的 `ForkJoinPool.commonPool()` 作为执行器，所有未指定执行器的异步任务都会使用该线程池。这意味着应用程序、多个库或框架（如 Spring、第三方库）若都依赖 `CompletableFuture`，默认情况下它们都会共享同一个线程池
+`CompletableFuture` 默认使用全局共享的线程池，但自定义线程池可以根据任务类型选择不同的线程数、任务队列与拒绝策略，使任务能够高效、可靠地执行
 
-虽然 `ForkJoinPool` 效率很高，但当同时提交大量任务时，可能会导致资源竞争和线程饥饿，进而影响系统性能
-
-为避免这些问题，建议为 `CompletableFuture` 提供自定义线程池，带来以下优势：
-
-- 隔离性：为不同任务分配独立的线程池，避免全局线程池资源争夺
-- 资源控制：根据任务特性调整线程池大小和队列类型，优化性能表现
-- 异常处理：通过自定义 `ThreadFactory` 更好地处理线程中的异常情况
-
-```java
-private ThreadPoolExecutor executor = new ThreadPoolExecutor(10, 10,
-        0L, TimeUnit.MILLISECONDS,
-        new LinkedBlockingQueue<Runnable>());
-
-CompletableFuture.runAsync(() -> {
-     //...
-}, executor);
-```
-
+但并不是每个场景都要自建一个线程池，否则会导致占用过多资源去存储线程、上下文切换严重。应该按照任务类型去复用有限个线程池，比如CPU密集型任务与IO密集型任务各一个线程池

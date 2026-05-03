@@ -8,6 +8,8 @@
 
 准确来讲是错误，常见的有OutOfMemoryError（内存耗尽）和StackOverflowError（栈溢出）等，这类错误一般是因为代码本身的问题
 
+**错误与异常的主要区别在于，错误不可恢复，而异常可以被捕获处理并恢复**
+
 ### 2. Exception
 
 这个才是通常意义上的异常，可以由try-catch语法捕获的那种。Exception又可以分为Checked Exception（受检查异常，必须处理）和Unchecked Exception（不受检查异常，可以不处理）

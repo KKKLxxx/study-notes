@@ -2,7 +2,7 @@
 
 ## 一、什么是BigKey
 
-BigKey（大key）是由于一个key的value数据过大或者数据量过多导致的，比如：
+BigKey指的是一个key对应的value所占用的空间过大，可能发生BigKey的场景包括：
 
 1、用String存储二进制
 
