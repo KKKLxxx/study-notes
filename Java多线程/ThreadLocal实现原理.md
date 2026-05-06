@@ -169,9 +169,9 @@ static class Entry extends WeakReference<ThreadLocal<?>> {
 
 上面讲过ThreadLocalMap通过弱引用解决了key的内存泄露问题，但是value并不会随着key的回收而回收，不过ThreadLocalMap也提供了解决办法
 
-**ThreadLocal中提供了remove()方法，用来断开value对象的引用链。并且每次调用get()和set()方法也会检查key为null的entry，也可以及时释放内存**
+**ThreadLocal中提供了remove()方法，用来断开value对象的引用链。并且每次调用get()和set()方法也会检查部分key为null的entry，也可以及时释放内存，不过最好保证在每次用完之后通过remove()方法释放，因为有些key可能不会扫描到**
 
-**不过最好保证在每次用完之后通过remove()方法释放，在线程池等线程复用的场景下，使用 `try-finally` 块可以确保即使发生异常，`remove()` 方法也一定会被执行**
+**可以使用 `try-finally` 块可以确保即使发生异常，`remove()` 方法也一定会被执行**
 
 ```java
 import java.util.concurrent.ExecutorService;
@@ -220,3 +220,13 @@ pool-1-thread-1 设置数据: 任务3
 pool-1-thread-1 已 remove ThreadLocal
 ```
 
+## 五、在线程池中使用ThreadLocal
+
+### 1. 脏数据问题
+
+因为线程池中的线程是复用的，如果一个任务执行完后没有调用remove()进行清理，那么下个任务可能读取到上一个任务的脏数据，导致逻辑错误
+
+### 2. 解决方法
+
+- 及时使用remove()清理
+- 使用TransmittableThreadLocal：TTL能够自动清空每个任务设置的ThreadLocal对象

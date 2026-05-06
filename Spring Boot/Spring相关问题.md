@@ -145,7 +145,7 @@ Spring Boot 是对 Spring 的增强，主要是通过自动装配机制减少配
 
 ### 2. SpringBoot自动装配原理
 
-Spring Boot 启动时通过 @EnableAutoConfiguration 加载自动配置类，并通过条件注解决定是否注册 Bean（比如`@ConditionalOnClass(DispatcherServlet.class)`表示只有当类路径中存在 DispatcherServlet 才生效）
+Spring Boot 启动时通过 `@EnableAutoConfiguration` 加载自动配置类，并通过条件注解决定是否注册 Bean（比如`@ConditionalOnClass(DispatcherServlet.class)`表示只有当类路径中存在 DispatcherServlet 才生效）
 
 ## 五、程序打包与运行
 

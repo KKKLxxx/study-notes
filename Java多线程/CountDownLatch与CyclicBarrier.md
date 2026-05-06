@@ -5,7 +5,7 @@
 
 ### 1. 作用
 
-`CountDownLatch`用于等待一个或多个线程完成操作，类似于`join()`。**`CountDownLatch`使用起来没有`join()`方便，但是可以提供比`join()`更细粒度的控制**（下面会举例子）
+`CountDownLatch`用于实现线程间的同步，类似于`join()`。**`CountDownLatch`使用起来没有`join()`方便，但是可以提供比`join()`更细粒度的控制**（下面会举例子）
 
 ### 2. 使用示例
 

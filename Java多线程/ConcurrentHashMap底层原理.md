@@ -1,17 +1,11 @@
 # ConcurrentHashMap底层原理
 
-一、HashMap与HashTable的缺陷
+一、HashTable与ConcurrentHashMap的区别
 ----------------------
 
-### 1. HashMap
+HashTable采用**全表锁**的机制保证线程安全（对`put()`、`get()`加synchronized锁），但是由于它的每次操作都要锁住整个集合，导致效率极其低下
 
-HashMap是非线程安全集合，在多线程环境下，如果没有特殊处理，会由于指令重排序等原因，发生赋值错误甚至死循环
-
-### 2. HashTable
-
-HashTable虽然保证了线程安全，但是由于它每次操作都要锁住整个集合，导致效率极其低下
-
-综合以上两点，ConcurrentHashMap通过**分段加锁**技术，在保证线程安全的同时提高了访问效率
+ConcurrentHashMap采用**分段加锁**的机制保证线程安全，也就是对链表或者红黑树的头结点加锁，所以在保证线程安全的同时提高了访问效率
 
 二、ConcurrentHashMap的底层结构
 ------------------------

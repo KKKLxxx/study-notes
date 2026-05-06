@@ -14,7 +14,7 @@
 
 #### 1.2 Broker / Topic / Queue
 
-- Broker 是 RocketMQ 中负责消息的接收、持久化和分发的节点
+- Broker 是 RocketMQ 中负责接收、持久化和分发消息的节点
   - Broker支持主从部署，实现数据备份与压力分摊
 - Topic 是逻辑上的消息分类，本身不存储数据
 - 一个 Topic 会被划分为多个 Queue，这些 Queue 分布在不同的 Broker 上，消息最终是存储在 Broker 的 Queue 中的

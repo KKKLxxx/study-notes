@@ -21,7 +21,7 @@
 
 ### 1. AQS的作用
 
-抽象队列同步器（**A**bstract**Q**ueued**S**ynchronizer）是`Lock`接口实现的基础，AQS**用一个`volatile int`成员变量表示同步状态，通过内置的FIFO队列来完成线程的排队工作**
+抽象队列同步器（**A**bstract**Q**ueued**S**ynchronizer）是`Lock`接口实现的基础，AQS**用一个`volatile int`类型的变量表示同步状态，通过内置的FIFO队列来完成线程的排队工作**
 
 AQS的主要使用方式是**继承**，**子类通过继承AQS并实现它的抽象方法来管理同步状态，在抽象方法的实现过程中免不了要对同步状态进行更改，这时就需要使用AQS提供的3个方法**
 
@@ -193,11 +193,12 @@ protected final boolean tryAcquire(int acquires) {
 
 **相同点**：
 
-- 都是可重入锁
+- **作用**：都是用来保证线程安全
+- **可重入性**：都是可重入锁
 
 **不同点**：
 
+- **使用方式**：ReentrantLock需要手动加解锁；synchronized是隐式的自动加解锁
 - **公平性**：ReentrantLock可以是公平或非公平的；synchronized只能是非公平的
-- **加解锁方式**：ReentrantLock需要手动加解锁；synchronized是隐式的自动加解锁
 - **超时获取锁**：ReentrantLock可通过`tryLock()`限制等待锁的时间，从而避免死锁；synchronized会持续等待获取锁
 - **等待可中断**：ReentrantLock可通过`lock.lockInterruptibly()`允许在等待锁的过程中被中断。也就是说在等待获取锁的过程中，如果其他线程中断当前线程执行`interrupt()`，当前线程就会抛出`InterruptedException`异常，可以捕捉该异常进行相应处理；synchronized在等待过程中无法被中断

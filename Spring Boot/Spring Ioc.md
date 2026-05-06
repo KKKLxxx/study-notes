@@ -72,7 +72,7 @@ public class UserService {
 
 - **极度灵活：** 如果你想把 `UserRepository` 换成 `MySQLRepository`，只要它们实现同一个接口，你甚至不需要改动 `UserService` 的代码
 
-**在不使用IoC时，如果一个Bean A依赖于另一个Bean B，那么就需要在A中通过构造函数创建B，这就造成了代码的耦合，并且需要A管理B的生命周期。使用IoC后，A只需通过注解告诉Ioc容器它需要B，IoC容器就会自动创建并注入B，并管理B的生命周期**
+**在不使用IoC时，如果一个Bean A依赖于另一个Bean B，那么就需要在A中通过构造函数创建B，并且需要A管理B的生命周期，这就造成了代码的耦合。使用IoC后，A只需通过注解告诉Ioc容器它需要B，IoC容器就会自动创建并注入B，并管理B的生命周期**
 
 ## 四、依赖注入DI
 
@@ -122,7 +122,7 @@ public class OrderService {
 
 **推荐的原因：**
 
-- **强制依赖，避免空指针**：构造器注入要求在对象创建时必须传入依赖，否则编译都过不了；而字段注入可能在运行期才报 NullPointerException
+- **避免空指针**：构造器注入通过构造器保证依赖在被使用前就是已经注入了的，从而避免空指针问题；而字段注入可能在注入前就被使用（但也因此无法解决循环依赖问题，因为构造器需要一个完整的依赖才能注入）
 - **保证不可变性**：构造器注入通过final修饰字段，从而保证不可变性；而字段注入本质是先创建对象再赋值，所以无法用final修饰（虽然可通过反射实现，但与语义不符，不推荐这样操作，所以Spring也不支持）
 - **便于单元测试**：可通过`OrderService service = new OrderService(mockUserService);`来快速测试，完全不依赖 Spring 容器；而字段注入必须借助反射或 Spring 测试框架
 
@@ -228,7 +228,7 @@ public class B {
 }
 ```
 
-为什么可以？因为 Spring 使用了三级缓存机制
+为什么可以？**因为 Spring 使用了三级缓存机制，通过暴露Bean的早期引用来解决循环依赖**
 
 ### 4. 三级缓存机制
 
@@ -237,11 +237,11 @@ public class B {
 Spring 内部维护三个缓存（仅单例 Bean）：
 
 ```
-一级缓存：singletonObjects（存储完全初始化完成的 Bean）
+一级缓存：singletonObjects（存储Bean的完整引用）
 
-二级缓存：earlySingletonObjects（存储提前暴露的半成品 Bean，没有完成属性的注入）
+二级缓存：earlySingletonObjects（存储Bean的早期引用，也就是没有完成属性注入的Bean）
 
-三级缓存：singletonFactories（存储生成早期 Bean 的工厂，可以用来创建原始对象或其代理对象）
+三级缓存：singletonFactories（存储创建Bean的工厂，可以用来创建Bean的原始对象或代理对象）
 ```
 
 创建过程：
@@ -254,8 +254,6 @@ Spring 内部维护三个缓存（仅单例 Bean）：
 
 4、向A注入B在**一级缓存**中的完整引用，完成创建并放入**一级缓存**
 
-**主要就是通过提前暴露Bean的早期引用来解决循环依赖**
-
 #### 4.2 为什么必须是单例？
 
 因为只有单例才会进入缓存，Prototype（原型/多例）不会被缓存，如果每次都新建，就无法解决
@@ -264,15 +262,14 @@ Spring 内部维护三个缓存（仅单例 Bean）：
 
 先说结论：**如果没有 AOP，二级缓存可以解决循环依赖；但只要涉及 AOP，就必须使用三级缓存，因为 Spring 需要“延迟决定”暴露的是原始对象，还是代理对象**（如果不管是否需要AOP，直接在二级缓存中放入代理后的对象也行，但是会执行不必要的代理操作）
 
-假设只有二级缓存且A需要AOP，那么B中注入的是二级缓存中未经代理的A，而一级缓存中保存的是代理后的A，导致不一致
+假设只有二级缓存且A需要AOP，那么B中注入的是A的原始对象，而一级缓存中保存的A的代理对象，导致不一致
 
 ## 六、Spring IoC 容器
 
 - `BeanFactory`：基础容器，只提供最核心的对象创建能力，**懒加载**
 
 - `ApplicationContext`：增强版容器，增加了 AOP、事件、国际化、环境管理等企业级功能，**预加载**，实际开发使用，常见实现：
-
-  - `ClassPathXmlApplicationContext`
-
-  - `AnnotationConfigApplicationContext`
+- `ClassPathXmlApplicationContext`
+  
+- `AnnotationConfigApplicationContext`
 

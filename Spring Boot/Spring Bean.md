@@ -119,7 +119,20 @@ private UserService userService;
 
 更推荐使用@Autowired，因为它是Spring提供的，更适合Spring架构的程序，并且先按类型匹配的逻辑更符合面向接口编程的思想
 
-面向接口编程：使用接口（或抽象类型）来定义模块之间的交互，而非直接依赖具体的实现类，从而降低耦合、易于扩展
+面向接口编程：模块之间的交互要依赖于接口而非具体的实现类，从而降低耦合、易于扩展
+
+比如
+
+```java
+// 依赖于接口
+@Service
+public class UserService {
+    private final UserRepository repo;  // 接口
+    public UserService(UserRepository repo) { ... }
+}
+```
+
+这样 `UserRepository` 可以是 `JdbcUserRepository`、`InMemoryUserRepository` 或 `MongoUserRepository`，`UserService` 无需修改
 
 ## 八、注解何时生效
 

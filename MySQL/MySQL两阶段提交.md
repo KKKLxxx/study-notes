@@ -1,6 +1,6 @@
 # MySQL两阶段提交
 
-两阶段提交（Two-Phase Commit, **2PC**）是 MySQL 中为了保证 **Redo Log** 和 **Binlog** 之间的数据一致性而设计的一种内部协调机制。
+两阶段提交（Two-Phase Commit, **2PC**）解决的是Binlog和Redo Log的写入顺序可能导致的主从数据库数据不一致的问题
 
 ## 一、 为什么需要两阶段提交？（作用）
 

@@ -174,8 +174,8 @@ public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveT
 
 可以通过对线程池调用**shutdown()**或者**shutdownNow()**方法关闭线程池
 
-- **shutdown()**：已提交但未开始的任务仍会被调度，已经开始的任务会正常执行完毕
-- **shutdownNow()**：已提交但未开始的任务会被撤销，已经开始的任务会被发送中断信号（但是否停止要看任务内部是否对中断信号正确响应）
+- **shutdown()**：不再接受新的任务，已提交但未开始的任务仍会被调度，已经开始的任务会正常执行完毕
+- **shutdownNow()**：不再接受新的任务，已提交但未开始的任务会被撤销，已经开始的任务会被发送中断信号（但是否停止要看任务内部是否对中断信号正确响应）
 
 ### 8. 线程池配置建议
 
