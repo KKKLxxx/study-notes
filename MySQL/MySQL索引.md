@@ -214,15 +214,7 @@ EXPLAIN SELECT * FROM staffs WHERE pos = "1" AND age = 1 AND name = "1"; -- 3
 
 因为MySQL优化器可以自动将AND左右的条件调换顺序，使之符合最左匹配原则
 
-### 2. 复合索引中间字段未使用
-
-如果不使用中间的age字段，会导致age和pos都失效，即**本身和后面的索引都失效**
-
-```sql
-EXPLAIN SELECT * FROM staffs WHERE name = "1" AND pos = "1"; -- 1
-```
-
-### 3. 复合索引前面的字段使用了（范围查询/不等于查询）
+### 2. 复合索引前面的字段使用了（范围查询/不等于查询）
 
 复合索引前面的字段使用了（范围查询/不等于查询）**导致后面的索引失效，但它本身会有效**
 
@@ -238,7 +230,7 @@ EXPLAIN SELECT * FROM staffs WHERE name != "1" AND age = 1 AND pos = "1"; -- 1
 
 但当查询为`name >= "1" AND age = 1`时，在`name="1"`的范围内查找，可以利用到`age`的索引
 
-### 4. 使用了is null / is not null
+### 3. 使用了is null / is not null
 
 这会导致**本身和后面的索引都失效**，比如
 
@@ -252,7 +244,7 @@ EXPLAIN SELECT * FROM staffs WHERE name = "1" AND age is not null AND pos = "1";
 
 **这里注意到我上面说建表时有没有规定NOT NULL会有区别，如果没有规定NOT NULL，该字段也可以走索引，并且不影响后面的字段走索引**
 
-### 5. LIKE前置%
+### 4. LIKE前置%
 
 也很经典了
 
@@ -264,19 +256,7 @@ EXPLAIN SELECT * FROM staffs WHERE name LIKE "%1"; -- 0
 
 [如何让LIKE前置%也走索引_KKKL的博客-CSDN博客](https://blog.csdn.net/qq_45404693/article/details/120694101 "如何让LIKE前置%也走索引_KKKL的博客-CSDN博客")
 
-### 6. varchar使用数字查询
-
-因为name是varchar类型的，查询的时候需要将条件用引号括起来，如果像下面一样，就会索引失效，而且查询结果也会很特别
-
-```sql
-EXPLAIN SELECT * FROM staffs WHERE name = 1; -- 0
-```
-
-可以参考这篇文章
-
-[MySQL中varchar字段使用数字查询的特殊现象_KKKL的博客-CSDN博客](https://blog.csdn.net/qq_45404693/article/details/120630862 "MySQL中varchar字段使用数字查询的特殊现象_KKKL的博客-CSDN博客")
-
-### 7. OR前后字段未均有索引
+### 5. OR连接的条件不都走索引
 
 虽然name有索引，但是add_time没有索引，如果将这两个字段OR在一起，会导致**完全不走索引**
 
@@ -286,7 +266,7 @@ EXPLAIN SELECT * FROM staffs WHERE name = "1" OR name = "2"; -- 1
 EXPLAIN SELECT * FROM staffs WHERE name = "1" OR add_time = "2021-10-09 23:12:56"; -- 0
 ```
 
-### 8. 使用了函数
+### 6. 使用了函数
 
 ```sql
 EXPLAIN SELECT * FROM staffs WHERE name = "1"; -- 1

@@ -61,7 +61,7 @@ resize operation.
 static final int UNTREEIFY_THRESHOLD = 6;
 ```
 
-直接说结论：会，当红黑树结点个数小于等于6时就会转回（即remove()操作）
+直接说结论：会，当红黑树结点个数小于等于6时就会转回（即remove()操作）（resize()我认为不算转回，算是重建了）
 
 ### 3. 哈希冲突解决方法有哪些？
 

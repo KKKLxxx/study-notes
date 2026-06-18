@@ -9,7 +9,7 @@
 **2. 作用**：
 
 - **主从复制 (Replication)**：从库通过读取主库的 binlog 来同步数据。
-- **数据恢复 (Recovery)**：使用 `mysqlbinlog` 工具可以将数据恢复到某个特定的时间点 (Point-in-Time Recovery)。
+- **数据恢复 (Recovery)**：使用 `mysqlbinlog` 工具可以将数据恢复到某个特定的时间点 (Point-in-Time Recovery)，假如A时刻生成了快照，C时刻发生了误操作，想要回到C之前的B时刻，那么就要基于A时刻的快照和A到B之间的binlog进行恢复
 
 **3. 存储内容 & 示例**：
 

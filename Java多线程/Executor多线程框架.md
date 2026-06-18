@@ -79,10 +79,10 @@ public ThreadPoolExecutor(int corePoolSize,
 
 用于保存等待执行的任务的阻塞队列，主要有4种
 
-- **ArrayBlockQueue**：基于数组结构的有界队列
-- **LinkedBlockQueue**：基于链表结构的无界队列
-- **SynchronousQueue**：同步队列，即不存储元素的队列，用于让线程池尽快创建新线程去执行任务
-- **PriorityBlockQueue**：具有优先级的无界队列
+- **ArrayBlockQueue**：基于数组结构的有界队列，适合大部分场景
+- **LinkedBlockQueue**：基于链表结构的无界队列，适合资源充足的场景，若果任务积压有资源耗尽的风险
+- **SynchronousQueue**：同步队列，即不存储元素的队列，用于让线程池尽快创建新线程去执行任务，适合希望任务被快速执行的场景
+- **PriorityBlockQueue**：具有优先级的无界队列，适合任务存在优先级的场景
 
 #### 2.6 threadFactory（创建线程的工厂）
 

@@ -1,6 +1,54 @@
 # Linux系统相关命令
 
-### 显示并设置环境变量 export
+## 一、CPU相关
+
+### 1. top
+
+可以查看每个进程实时的进程号、CPU占用率，内存占用率、已运行时间等信息
+
+<img src="https://raw.githubusercontent.com/KKKLxxx/img-host/master/202605162311411.png" alt="image-20260516231126315" style="zoom:50%;" />
+
+## 二、内存相关
+
+### 1. free
+
+可以查看物理内存、交换内存的使用情况，包括总容量、已用容量、剩余容量等。配合`-h`选项更直观
+
+<img src="https://raw.githubusercontent.com/KKKLxxx/img-host/master/202605162319947.png" alt="image-20260516231900911" style="zoom:50%;" />
+
+`swap`（交换空间）是磁盘上的一块区域，当内存不足时用于存放从物理内存中暂时换出的内存页（具体定义暂时不管）
+
+### 2. vmstat
+
+可以查看虚拟内存的使用情况
+
+<img src="https://raw.githubusercontent.com/KKKLxxx/img-host/master/202605162340398.png" alt="image-20260516234001366" style="zoom:50%;" />
+
+### 3. top
+
+top中也展示了内存信息
+
+## 三、磁盘相关
+
+### 1. df
+
+可以显示每个盘的总容量、已用容量、剩余可用容量等信息，默认单位为KB，可通过`-h`选项增强可读性
+
+<img src="https://raw.githubusercontent.com/KKKLxxx/img-host/master/202605162340578.png" alt="image-20260516234054524" style="zoom:50%;" />
+
+## 四、端口相关
+
+### 1. netstat
+
+```
+netstat -nap | grep 'pid'
+```
+
+其中pid要先通过ps获取
+
+## 五、其他
+
+### 1. 显示并设置环境变量 export
 
 export命令用于将shell变量输出为环境变量，或者将shell函数输出为环境变量
 
@@ -18,32 +66,7 @@ export JAVA_HOME=/usr/java/jdk1.8.0_152
 
 设置环境变量
 
-### 磁盘使用情况 df
-
-可以显示每个盘的总容量、已用容量、剩余可用容量等信息，默认单位为KB，可通过`-h`选项增强可读性
-
-### 查看系统整体运行情况 top
-
-直接输入`top`指令，可以查看每个进程实时的进程号、CPU占用率，内存占用率、已运行时间等信息
-
-### 显示当前进程的状态 ps
-
-可以查看当前时刻的进程状态，有很多选项可以搭配。与top的区别主要在于，top是持续监测，ps是一个时刻的状态；top可以查看CPU、内存等资源的使用情况，ps不可以
-
-### 查看进程端口号 netstat
-
-```
-netstat -nap | grep 'pid'
-```
-其中pid要先通过ps获取
-
-### 显示内存使用情况 free
-
-可以查看物理内存、虚拟内存的使用情况，包括总容量、已用容量、剩余容量等。配合`-h`选项更直观
-
-### 显示虚拟内存状态 vmstat
-
-### 结束进程 kill
+### 2. 结束进程 kill
 
 通过`kill`+进程号的方式结束一个进程，可用管道符来快速获取进程号
 
